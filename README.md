@@ -1,5 +1,5 @@
 # Go Highload
-Mix everything with everything, just for the sake of it.
+Mixing everything with everything, just for the sake of it.
 
 ## Overview 
 

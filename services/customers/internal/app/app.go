@@ -21,7 +21,7 @@ func Run() {
 
 	db, err := postgres.NewClient(cfg.Postgres.User, cfg.Postgres.Password, cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DB)
 	if err != nil {
-		log.Fatalf("failed to connect to postgres")
+		log.Fatalf("failed to connect to Postgres")
 	}
 
 	e.GET("/", func(c echo.Context) error {
@@ -34,7 +34,6 @@ func Run() {
 		defer rows.Close()
 
 		var customers []domain.Customer
-
 		for rows.Next() {
 			var cu domain.Customer
 			if err := rows.Scan(&cu.ID, &cu.FirstName, &cu.LastName, &cu.UpdatedAt, &cu.CreatedAt); err != nil {
@@ -45,7 +44,7 @@ func Run() {
 		}
 
 		if err := rows.Err(); err != nil {
-			return c.JSON(http.StatusInternalServerError, "Error reading rows")
+			return c.JSON(http.StatusInternalServerError, "Error reading customers")
 		}
 
 		return c.JSON(http.StatusOK, struct {

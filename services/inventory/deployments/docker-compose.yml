@@ -8,6 +8,8 @@ services:
     container_name: go-highload-cassandra
     ports:
       - ${CASSANDRA_PORT}:${CASSANDRA_PORT}
+    # environment:
+      # CASSANDRA_BROADCAST_ADDRESS: localhost
     volumes:
       - go-highload-cassandra-data:/var/lib/cassandra
 

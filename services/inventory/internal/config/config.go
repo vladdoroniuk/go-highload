@@ -13,20 +13,20 @@ const (
 )
 
 type Config struct {
-	App      AppConfig
-	Postgres PostgresConfig
+	App       AppConfig
+	Cassandra CassandraConfig
 }
 
 type AppConfig struct {
 	Port string
 }
 
-type PostgresConfig struct {
+type CassandraConfig struct {
 	User     string
 	Password string
 	Host     string
 	Port     string
-	DB       string
+	Keyspace string
 }
 
 func Load() (*Config, error) {
@@ -42,12 +42,12 @@ func Load() (*Config, error) {
 		App: AppConfig{
 			Port: os.Getenv("APP_PORT"),
 		},
-		Postgres: PostgresConfig{
-			User:     os.Getenv("POSTGRES_USER"),
-			Password: os.Getenv("POSTGRES_PASSWORD"),
-			Host:     os.Getenv("POSTGRES_HOST"),
-			Port:     os.Getenv("POSTGRES_PORT"),
-			DB:       os.Getenv("POSTGRES_DB"),
+		Cassandra: CassandraConfig{
+			User:     os.Getenv("CASSANDRA_USER"),
+			Password: os.Getenv("CASSANDRA_PASSWORD"),
+			Host:     os.Getenv("CASSANDRA_HOST"),
+			Port:     os.Getenv("CASSANDRA_PORT"),
+			Keyspace: os.Getenv("CASSANDRA_KEYSPACE"),
 		},
 	}, nil
 }

@@ -1,13 +1,11 @@
 package app
 
 import (
-	"context"
-	"github.com/go-highload/services/customers/internal/config"
-	"github.com/go-highload/services/customers/internal/domain"
-	"github.com/go-highload/services/customers/pkg/postgres"
+	"github.com/go-highload/services/inventory/internal/config"
+	"github.com/go-highload/services/inventory/internal/domain"
+	"github.com/go-highload/services/inventory/pkg/cassandra"
 	"github.com/labstack/echo/v4"
 	"log"
-	"log/slog"
 	"net/http"
 )
 
@@ -19,39 +17,33 @@ func Run() {
 
 	e := echo.New()
 
-	db, err := postgres.NewClient(cfg.Postgres.User, cfg.Postgres.Password, cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DB)
+	db, err := cassandra.NewClient(cfg.Cassandra.User, cfg.Cassandra.Password, cfg.Cassandra.Host, cfg.Cassandra.Port, cfg.Cassandra.Keyspace)
 	if err != nil {
-		log.Fatalf("failed to connect to postgres")
+		log.Fatalf("failed to connect to Cassandra")
 	}
 
 	e.GET("/", func(c echo.Context) error {
-		q := "SELECT * FROM customers"
+		q := "SELECT sku, warehouse_id, quantity_available, quantity_reserved, last_updated FROM inventory_by_sku"
 
-		rows, err := db.Query(c.Request().Context(), q)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Error querying database")
-		}
-		defer rows.Close()
+		iter := db.Query(q).Iter()
 
-		var customers []domain.Customer
-
-		for rows.Next() {
-			var cu domain.Customer
-			if err := rows.Scan(&cu.ID, &cu.FirstName, &cu.LastName, &cu.UpdatedAt, &cu.CreatedAt); err != nil {
-				slog.Log(context.Background(), slog.LevelError, "Error processing data", err)
-				return c.JSON(http.StatusInternalServerError, "Error processing data")
+		var inventory []domain.Inventory
+		for {
+			var i domain.Inventory
+			if !iter.Scan(&i.SKU, &i.WarehouseID, &i.QuantityAvailable, &i.QuantityReserved, &i.LastUpdated) {
+				break
 			}
-			customers = append(customers, cu)
+			inventory = append(inventory, i)
 		}
 
-		if err := rows.Err(); err != nil {
-			return c.JSON(http.StatusInternalServerError, "Error reading rows")
+		if err := iter.Close(); err != nil {
+			return c.JSON(http.StatusInternalServerError, "Error reading inventory")
 		}
 
 		return c.JSON(http.StatusOK, struct {
-			Customers []domain.Customer `json:"customers"`
+			Inventory []domain.Inventory `json:"inventory"`
 		}{
-			Customers: customers,
+			Inventory: inventory,
 		})
 	})
 
