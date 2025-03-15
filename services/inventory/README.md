@@ -1,1 +1,1 @@
-# Orders Service
+# Inventory
