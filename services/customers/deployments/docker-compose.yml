@@ -10,7 +10,7 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
-      - go-highload-postgres-data:/var/lib/go-highload-postgres/data
+      - go-highload-postgres-data:/var/lib/postgres/data
 
   customers-init:
     image: postgres:14.16-alpine3.20

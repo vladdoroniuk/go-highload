@@ -7,7 +7,7 @@ services:
     ports:
       - ${CASSANDRA_PORT}:${CASSANDRA_PORT}
     volumes:
-      - go-highload-cassandra-data:/var/lib/go-highload-cassandra
+      - go-highload-cassandra-data:/var/lib/cassandra
 
   inventory-init:
     image: cassandra:4.0.17-jammy
