@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  go-highload-cassandra:
+    image: cassandra:4.0.17-jammy
+    container_name: go-highload-cassandra
+    ports:
+      - ${CASSANDRA_PORT}:${CASSANDRA_PORT}
+    volumes:
+      - go-highload-cassandra-data:/var/lib/go-highload-cassandra
+
+  inventory-init:
+    image: cassandra:4.0.17-jammy
+    container_name: inventory-init
+    depends_on:
+      - go-highload-cassandra
+    environment:
+      CASSANDRA_USER: ${CASSANDRA_USER}
+      CASSANDRA_PASSWORD: ${CASSANDRA_PASSWORD}
+      CASSANDRA_KEYSPACE: ${CASSANDRA_KEYSPACE}
+    restart: no
+    entrypoint: [ "/init.sh" ]
+    volumes:
+      - ./cassandra-init.sh:/init.sh
+
+volumes:
+  go-highload-cassandra-data:

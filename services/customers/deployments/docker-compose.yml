@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  go-highload-postgres:
+    image: postgres:14.16-alpine3.20
+    container_name: go-highload-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - go-highload-postgres-data:/var/lib/go-highload-postgres/data
+
+  customers-init:
+    image: postgres:14.16-alpine3.20
+    container_name: customers-init
+    depends_on:
+      - go-highload-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    restart: no
+    entrypoint: ["/init.sh"]
+    volumes:
+      - ./postgres-init.sh:/init.sh
+
+volumes:
+  go-highload-postgres-data:
