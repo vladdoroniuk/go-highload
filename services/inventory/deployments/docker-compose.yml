@@ -1,5 +1,7 @@
 version: '3.9'
 
+name: inventory
+
 services:
   go-highload-cassandra:
     image: cassandra:4.0.17-jammy

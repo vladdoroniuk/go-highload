@@ -1,5 +1,7 @@
 version: '3.9'
 
+name: customers
+
 services:
   go-highload-postgres:
     image: postgres:14.16-alpine3.20
