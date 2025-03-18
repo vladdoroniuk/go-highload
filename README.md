@@ -28,7 +28,6 @@ Mixing everything with everything, just for the sake of it.
 - Stripe
 
 ### Other
-- Domain-Driven Design
 - Saga
 - Transactional Outbox
 - ETL
