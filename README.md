@@ -13,16 +13,16 @@ Mixing everything with everything, just for the sake of it.
 - Analytics
 
 ### Tools
-- PostgreSQL
-- Elasticsearch
-- Cassandra
-- ClickHouse
-- Kafka
-- RabbitMQ
-- gRPC
-- Temporal
-- Prometheus
-- Grafana
+- PostgreSQL (primal storage)
+- Elasticsearch (search engine)
+- Cassandra (write-heavy storage)
+- ClickHouse (OLAP)
+- Kafka (stream processing)
+- RabbitMQ (message queue)
+- gRPC (sync communication)
+- Temporal (workflow orchestration)
+- Prometheus (metrics scrapping)
+- Grafana (visualizations)
 
 ### APIs
 - Stripe
@@ -30,7 +30,10 @@ Mixing everything with everything, just for the sake of it.
 ### Other
 - Saga
 - Transactional Outbox
-- ETL
+- Deadlines
+- Retries
+- Rate Limiting
+- Circuit Breaker
 
 ## System Design
 
