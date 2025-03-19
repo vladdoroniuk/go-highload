@@ -27,7 +27,7 @@ Mixing everything with everything, just for the sake of it.
 ### APIs
 - Stripe
 
-### Other
+### Patterns
 - Saga
 - Transactional Outbox
 - Deadlines
