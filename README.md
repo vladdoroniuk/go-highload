@@ -15,7 +15,7 @@ Mixing everything with everything, just for the sake of it.
 ### Tools
 - PostgreSQL (primal storage)
 - Elasticsearch (search engine)
-- Cassandra (write-heavy storage)
+- Cassandra (write-heavy distributed storage)
 - ClickHouse (OLAP)
 - Kafka (stream processing)
 - RabbitMQ (message queue)
