@@ -1,0 +1,30 @@
+version: "3.9"
+
+include:
+  - ./docker-compose.customers.yml
+  - ./docker-compose.products.yml
+  - ./docker-compose.inventory.yml
+
+services:
+  go-highload-postgres:
+    image: postgres:14.16-alpine3.20
+    container_name: go-highload-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - go-highload-postgres-data:/var/lib/postgres/data
+  
+  go-highload-cassandra:
+    image: cassandra:4.0.17-jammy
+    container_name: go-highload-cassandra
+    ports:
+      - ${CASSANDRA_PORT}:${CASSANDRA_PORT}
+    volumes:
+      - go-highload-cassandra-data:/var/lib/cassandra
+
+volumes:
+  go-highload-postgres-data:
+  go-highload-cassandra-data:
