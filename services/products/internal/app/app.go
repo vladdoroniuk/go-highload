@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/go-highload/services/products/internal/config"
 	"github.com/go-highload/services/products/internal/domain"
+	"github.com/go-highload/services/products/pkg/elasticsearch"
 	"github.com/go-highload/services/products/pkg/postgres"
 	"github.com/labstack/echo/v4"
 	"log"
@@ -24,8 +25,13 @@ func Run() {
 		log.Fatalf("failed to connect to Postgres")
 	}
 
+	es, err := elasticsearch.NewClient(cfg.Elasticsearch.User, cfg.Elasticsearch.Password, cfg.Elasticsearch.Host, cfg.Elasticsearch.Port)
+	if err != nil {
+		log.Fatalf("failed to connect to Elasticsearch")
+	}
+
 	e.GET("/", func(c echo.Context) error {
-		q := "SELECT * FROM customers"
+		q := "SELECT * FROM products"
 
 		rows, err := db.Query(c.Request().Context(), q)
 		if err != nil {
@@ -33,9 +39,9 @@ func Run() {
 		}
 		defer rows.Close()
 
-		var customers []domain.Customer
+		var customers []domain.Product
 		for rows.Next() {
-			var cu domain.Customer
+			var cu domain.Product
 			if err := rows.Scan(&cu.ID, &cu.FirstName, &cu.LastName, &cu.UpdatedAt, &cu.CreatedAt); err != nil {
 				slog.Log(context.Background(), slog.LevelError, "Error processing data", err)
 				return c.JSON(http.StatusInternalServerError, "Error processing data")
@@ -48,9 +54,9 @@ func Run() {
 		}
 
 		return c.JSON(http.StatusOK, struct {
-			Customers []domain.Customer `json:"customers"`
+			Products []domain.Product `json:"customers"`
 		}{
-			Customers: customers,
+			Products: customers,
 		})
 	})
 

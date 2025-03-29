@@ -7,8 +7,8 @@ until cqlsh go-highload-cassandra -e "DESCRIBE KEYSPACES" &>/dev/null; do
     echo "Still waiting for Cassandra..."
 done
 
-echo "Cassandra is ready! Creating keyspace if not exists..."
+echo "Cassandra is ready! Creating keyspace '${CASSANDRA_KEYSPACE}' if not exists..."
 
-cqlsh go-highload-cassandra -u "$CASSANDRA_USER" -p "$CASSANDRA_PASSWORD" -e "CREATE KEYSPACE IF NOT EXISTS $CASSANDRA_KEYSPACE_INVENTORY WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};"
+cqlsh go-highload-cassandra -u "${CASSANDRA_USER}" -p "${CASSANDRA_PASSWORD}" -e "CREATE KEYSPACE IF NOT EXISTS ${CASSANDRA_KEYSPACE} WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'};"
 
 echo "Done!"

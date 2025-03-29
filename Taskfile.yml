@@ -3,18 +3,19 @@ version: '3'
 tasks:
   start:
     cmds:
-      - colima start --vm-type=vz
+      - colima start --vm-type=vz --cpu 4 --memory 4
   
   prune:
     cmds:
       - docker ps -q | xargs -r docker stop
-      - docker system prune -af --volumes
+      - docker system prune -af
+      - docker volume prune -af
   
-  clean:
+  clear:
     cmds:
       - docker ps -q | xargs -r docker stop
       - docker container prune -f
-      - docker volume prune -f
+      - docker volume prune -af
       - docker network prune -f
 
   up:

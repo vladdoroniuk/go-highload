@@ -15,7 +15,7 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
-      - go-highload-postgres-data:/var/lib/postgres/data
+      - go-highload-postgres-data:/var/lib/postgresql/data
   
   go-highload-cassandra:
     image: cassandra:4.0.17-jammy
@@ -24,7 +24,20 @@ services:
       - ${CASSANDRA_PORT}:${CASSANDRA_PORT}
     volumes:
       - go-highload-cassandra-data:/var/lib/cassandra
+  
+  go-highload-elasticsearch:
+    image: elasticsearch:8.17.4
+    container_name: go-highload-elasticsearch
+    environment:
+      discovery.type: single-node  
+      xpack.security.enabled: true
+      ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD} 
+    ports:
+      - ${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}
+    volumes:
+      - go-highload-elasticsearch-data:/usr/share/elasticsearch/data
 
 volumes:
   go-highload-postgres-data:
   go-highload-cassandra-data:
+  go-highload-elasticsearch-data:

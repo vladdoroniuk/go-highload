@@ -1,9 +1,9 @@
 version: '3.9'
 
 services:
-  products-init:
+  products-postgres-init:
     image: postgres:14.16-alpine3.20
-    container_name: products-init
+    container_name: products-postgres-init
     env_file:
       - ../configs/local.env
     depends_on:
@@ -16,3 +16,20 @@ services:
     entrypoint: ["/init.sh"]
     volumes:
       - ./postgres-init.sh:/init.sh
+  
+  products-elasticsearch-init:
+    image: curlimages/curl:latest 
+    container_name: products-elasticsearch-init
+    env_file:
+      - ../configs/local.env
+    depends_on:
+      - go-highload-elasticsearch
+    environment:
+      ELASTICSEARCH_USER: ${ELASTICSEARCH_USER}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+      ELASTICSEARCH_PORT: ${ELASTICSEARCH_PORT}
+      ELASTICSEARCH_INDEX: ${ELASTICSEARCH_INDEX_PRODUCTS}
+    entrypoint: [ "/init.sh" ]
+    volumes:
+      - ./elasticsearch-init.sh:/init.sh
+    

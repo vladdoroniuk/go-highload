@@ -1,9 +1,9 @@
 version: '3.9'
 
 services:
-  inventory-init:
+  inventory-cassandra-init:
     image: cassandra:4.0.17-jammy
-    container_name: inventory-init
+    container_name: inventory-cassandra-init
     depends_on:
       - go-highload-cassandra
     environment:
